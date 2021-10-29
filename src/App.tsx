@@ -1,9 +1,12 @@
+import { Header } from "./components/Header";
+import { GlobalStyle } from "./styles/global";
+
 function App() {
     return (
-        <div>
-            <h1>hello react</h1>
-            <p>from tsc</p>
-        </div>
+        <>
+            <Header />
+            <GlobalStyle />
+        </>
     );
 }
 
