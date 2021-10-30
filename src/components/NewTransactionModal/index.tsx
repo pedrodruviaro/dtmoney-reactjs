@@ -1,12 +1,12 @@
 import { FormEvent, useState } from "react";
-import Modal from "react-modal";
+import { useTransactions } from "../../hooks/useTransactions";
 import { Container, RadioBox, TransactionTypeContainer } from "./styles";
 import {
     AiOutlineClose,
     AiOutlinePlusCircle,
     AiOutlineMinusCircle,
 } from "react-icons/ai";
-import { api } from "../../services/api";
+import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
@@ -19,6 +19,8 @@ export function NewTransactionModal({
     isOpen,
     onRequestClose,
 }: NewTransactionModalProps) {
+    const { createTransaction } = useTransactions();
+
     // states
     const [type, setType] = useState("deposit");
 
@@ -26,12 +28,22 @@ export function NewTransactionModal({
     const [category, setCategory] = useState("");
     const [amount, setAmount] = useState(0);
 
-    function handleCreateNewTransaction(event: FormEvent) {
+    // creating new transaction
+    async function handleCreateNewTransaction(event: FormEvent) {
         event.preventDefault();
 
-        const data = { title, amount, category, type };
+        await createTransaction({
+            title,
+            category,
+            amount,
+            type,
+        });
 
-        api.post("/transactions", data);
+        setTitle("");
+        setAmount(0);
+        setCategory("");
+        setType("deposit");
+        onRequestClose();
     }
 
     return (
